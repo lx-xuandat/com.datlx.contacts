@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/app_bar_search"
+        android:icon="@drawable/icon_search"
+        android:title="Search"
+        app:actionViewClass="android.widget.SearchView"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/btnAddContact"
+        android:icon="@android:drawable/ic_menu_add"
+        android:onClick="btnAddContactOnClick"
+        android:title="@string/th_m_danh_b"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/btnBackUpGoogleDrive"
+        android:icon="@android:drawable/btn_star"
+        android:onClick="btnBackUpGoogleDriveOnClick"
+        android:title="@string/backUpGoogleDrive"
+        app:showAsAction="withText" />
+
+    <item
+        android:id="@+id/btnImportGoogleDrive"
+        android:icon="@android:drawable/btn_star"
+        android:onClick="btnImportGoogleDriveOnClick"
+        android:title="@string/ImportGoogleDrive"
+        app:showAsAction="never" />
+</menu>

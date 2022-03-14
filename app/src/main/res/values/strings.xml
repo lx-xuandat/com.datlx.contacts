@@ -17,4 +17,7 @@
     <string name="datlx_deha_soft_com">datlx@deha-soft.com</string>
     <string name="luu_xian_dat">Luu Xian Dat</string>
     <string name="_96_dino_cong">96 Dino Cong</string>
+    <string name="th_m_danh_b">Thêm Danh Bạ</string>
+    <string name="backUpGoogleDrive">Backup Google Drive</string>
+    <string name="ImportGoogleDrive">" Import Google Drive"</string>
 </resources>
