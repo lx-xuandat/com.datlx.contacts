@@ -1,6 +1,7 @@
 package com.datlx.contacts.activity;
 
-import androidx.annotation.NonNull;
+import static com.datlx.contacts.R.menu.menu_option_activity_contacts;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -12,6 +13,8 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -134,6 +137,24 @@ public class ContactsActivity extends AppCompatActivity {
     }
 
     public void redirectActivityAddContact(View view) {
+        startActivity(new Intent(this, StudentsActivity.class));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(menu_option_activity_contacts, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    public void btnAddContactOnClick(MenuItem item) {
+        startActivity(new Intent(this, StudentsActivity.class));
+    }
+
+    public void btnImportGoogleDriveOnClick(MenuItem item) {
+        startActivity(new Intent(this, StudentsActivity.class));
+    }
+
+    public void btnBackUpGoogleDriveOnClick(MenuItem item) {
         startActivity(new Intent(this, StudentsActivity.class));
     }
 }
