@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Contacts</string>
+    <string name="male">Male</string>
+    <string name="gender">Gender</string>
+    <string name="female">FeMale</string>
+    <string name="add">Add</string>
+    <string name="enter_name">Enter name</string>
+    <string name="enter_phone">Enter Phone</string>
+    <string name="name">Name</string>
+    <string name="phone">Phone</string>
+    <string name="imgAvatarHelper">Click Me</string>
+    <string name="call_or_message">Call Or Message</string>
+    <string name="call">Call</string>
+    <string name="send_message">Send Message</string>
+    <string name="add_contact">Add Contact</string>
+    <string name="_0346479339">0346479339</string>
+    <string name="datlx_deha_soft_com">datlx@deha-soft.com</string>
+    <string name="luu_xian_dat">Luu Xian Dat</string>
+    <string name="_96_dino_cong">96 Dino Cong</string>
+</resources>
