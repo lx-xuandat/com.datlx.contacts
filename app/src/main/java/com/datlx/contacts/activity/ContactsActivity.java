@@ -20,7 +20,7 @@ import android.widget.ListView;
 
 import com.datlx.contacts.R;
 import com.datlx.contacts.adapter.ContactAdapter;
-import com.datlx.contacts.database.DBContactManager;
+import com.datlx.contacts.database.SQLiteHelper;
 import com.datlx.contacts.model.Contact;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ import java.util.List;
 
 public class ContactsActivity extends AppCompatActivity {
     private ListView lvContacts;
-    private DBContactManager mDBContact;
+    private SQLiteHelper mSqliteHelper;
     private List<Contact> mListContact;
     private ContactAdapter mContactAdapter;
 
@@ -37,8 +37,8 @@ public class ContactsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts);
         lvContacts = findViewById(R.id.lv_contacts);
-        mDBContact = new DBContactManager(this);
-        mListContact = mDBContact.all();
+        mSqliteHelper = new SQLiteHelper(this);
+        mListContact = mSqliteHelper.all();
         setAdapter();
         requestPermissions();
         showDialogCallSMS();
@@ -125,7 +125,7 @@ public class ContactsActivity extends AppCompatActivity {
 
     private void updateListViewContact() {
         mListContact.clear();
-        mListContact.addAll(mDBContact.all());
+        mListContact.addAll(mSqliteHelper.all());
         if (mContactAdapter != null) {
             mContactAdapter.notifyDataSetChanged();
         }

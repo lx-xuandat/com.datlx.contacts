@@ -9,7 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.datlx.contacts.R;
-import com.datlx.contacts.database.DBContactManager;
+import com.datlx.contacts.database.SQLiteHelper;
 import com.datlx.contacts.model.Contact;
 
 public class ContactAddActivity extends AppCompatActivity {
@@ -19,14 +19,14 @@ public class ContactAddActivity extends AppCompatActivity {
     private EditText edtEmail;
     private EditText edtAddress;
     private Button btnSaveContact;
-    private DBContactManager mSQLiteManager;
+    private SQLiteHelper mSQLiteHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_add);
         setWidget();
-        mSQLiteManager = new DBContactManager(this);
+        mSQLiteHelper = new SQLiteHelper(this);
     }
 
     public void btnSaveContactClick(View view) {
@@ -39,7 +39,7 @@ public class ContactAddActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT
             ).show();
         } else {
-            if (mSQLiteManager.insert(mContact) > 0) {
+            if (mSQLiteHelper.insert(mContact) > 0) {
                 Toast.makeText(
                         this,
                         "Đã Lưu " + mContact.getContactName(),
