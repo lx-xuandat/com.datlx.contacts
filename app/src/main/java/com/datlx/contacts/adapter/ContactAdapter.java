@@ -45,10 +45,10 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
 
         Contact contact = arrayContact.get(position);
 
-        viewHolder.tvName.setText(contact.getName());
+        viewHolder.tvName.setText(contact.getContactName());
         viewHolder.tvNumber.setText(contact.getPhone());
 
-        if (contact.isMale()) {
+        if (contact.getAvatar() != null) {
             viewHolder.imgAvatar.setBackgroundResource(R.drawable.ic_male);
         } else {
             viewHolder.imgAvatar.setBackgroundResource(R.drawable.ic_female);
