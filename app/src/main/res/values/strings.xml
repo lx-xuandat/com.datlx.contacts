@@ -16,4 +16,5 @@
     <string name="enter_email">Email</string>
     <string name="tv_contact_name">Contact name</string>
     <string name="tv_contact_phone">Contact Phone</string>
+    <string name="search">Search</string>
 </resources>

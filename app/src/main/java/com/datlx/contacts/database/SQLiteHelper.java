@@ -14,7 +14,7 @@ import com.datlx.contacts.model.Contact;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DBContactManager extends SQLiteOpenHelper {
+public class SQLiteHelper extends SQLiteOpenHelper {
     private static final int VERSION = 1;
     private static final String DATABASE_NAME = "datlx_contacts";
     private static final String TABLE_NAME = "students";
@@ -28,7 +28,7 @@ public class DBContactManager extends SQLiteOpenHelper {
 
     private final Context context;
 
-    public DBContactManager(@Nullable Context context) {
+    public SQLiteHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, VERSION);
         this.context = context;
     }
