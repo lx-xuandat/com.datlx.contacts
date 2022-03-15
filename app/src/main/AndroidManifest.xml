@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Contacts">
         <activity
+            android:name=".activity.ContactAddActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.StudentsActivity"
             android:exported="false" />
         <activity

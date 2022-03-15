@@ -11,21 +11,21 @@
     <item
         android:id="@+id/btnAddContact"
         android:icon="@android:drawable/ic_menu_add"
-        android:onClick="btnAddContactOnClick"
-        android:title="@string/th_m_danh_b"
+        android:onClick="activityContactAdd"
+        android:title="@string/btn_save_contact"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/btnBackUpGoogleDrive"
         android:icon="@android:drawable/btn_star"
         android:onClick="btnBackUpGoogleDriveOnClick"
-        android:title="@string/backUpGoogleDrive"
+        android:title="@string/btn_backUpGoogleDrive"
         app:showAsAction="withText" />
 
     <item
         android:id="@+id/btnImportGoogleDrive"
         android:icon="@android:drawable/btn_star"
         android:onClick="btnImportGoogleDriveOnClick"
-        android:title="@string/ImportGoogleDrive"
+        android:title="@string/btn_ImportGoogleDrive"
         app:showAsAction="never" />
 </menu>
