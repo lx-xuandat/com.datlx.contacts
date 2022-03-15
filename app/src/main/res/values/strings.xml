@@ -1,23 +1,19 @@
 <resources>
     <string name="app_name">Contacts</string>
-    <string name="male">Male</string>
-    <string name="gender">Gender</string>
-    <string name="female">FeMale</string>
-    <string name="add">Add</string>
-    <string name="enter_name">Enter name</string>
-    <string name="enter_phone">Enter Phone</string>
-    <string name="name">Name</string>
-    <string name="phone">Phone</string>
-    <string name="imgAvatarHelper">Click Me</string>
-    <string name="call_or_message">Call Or Message</string>
-    <string name="call">Call</string>
-    <string name="send_message">Send Message</string>
-    <string name="add_contact">Add Contact</string>
-    <string name="_0346479339">0346479339</string>
-    <string name="datlx_deha_soft_com">datlx@deha-soft.com</string>
-    <string name="luu_xian_dat">Luu Xian Dat</string>
-    <string name="_96_dino_cong">96 Dino Cong</string>
-    <string name="th_m_danh_b">Thêm Danh Bạ</string>
-    <string name="backUpGoogleDrive">Backup Google Drive</string>
-    <string name="ImportGoogleDrive">" Import Google Drive"</string>
+    <string name="btn_save_contact">Lưu Danh Bạ</string>
+    <string name="btn_create_contact">Tạo Người Liên Hệ</string>
+    <string name="btn_call">Gọi Điện</string>
+    <string name="btn_send_message">Gửi Tin Nhắn</string>
+    <string name="btn_backUpGoogleDrive">Backup Google Drive</string>
+    <string name="btn_ImportGoogleDrive">"Import Google Drive"</string>
+
+    <string name="dialog_call_or_message">Bạn Muốn Gọi Điện, Gửi Tin Nhắn ?</string>
+
+    <string name="enter_company">Công Ty</string>
+    <string name="enter_name">Họ Tên</string>
+    <string name="enter_phone">Điện Thoại</string>
+    <string name="enter_address">Địa Chỉ</string>
+    <string name="enter_email">Email</string>
+    <string name="tv_contact_name">Contact name</string>
+    <string name="tv_contact_phone">Contact Phone</string>
 </resources>

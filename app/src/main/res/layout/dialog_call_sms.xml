@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/call_or_message"
+        android:text="@string/dialog_call_or_message"
         android:textSize="20sp"
         android:textStyle="bold" />
 
@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/call"
+            android:text="@string/btn_call"
             style="?android:attr/buttonBarButtonStyle" />
 
         <Button
@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/send_message"
+            android:text="@string/btn_send_message"
             style="?android:attr/buttonBarButtonStyle" />
     </LinearLayout>
 </LinearLayout>

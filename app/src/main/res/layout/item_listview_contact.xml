@@ -8,8 +8,7 @@
     <ImageView
         android:id="@+id/img_avatar"
         android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:contentDescription="@string/imgAvatarHelper" />
+        android:layout_height="60dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/name"
+            android:text="@string/tv_contact_name"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -32,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/margin_top"
-            android:text="@string/phone"
+            android:text="@string/tv_contact_phone"
             android:textSize="10sp" />
     </LinearLayout>
 </LinearLayout>
