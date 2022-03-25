@@ -20,15 +20,16 @@ import android.widget.ListView;
 
 import com.datlx.contacts.R;
 import com.datlx.contacts.adapter.ContactAdapter;
-import com.datlx.contacts.database.SQLiteHelper;
+import com.datlx.contacts.database.ContactDataAccess;
 import com.datlx.contacts.model.Contact;
+import com.datlx.contacts.utilities.GoogleDriveAPI;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ContactsActivity extends AppCompatActivity {
     private ListView lvContacts;
-    private SQLiteHelper mSqliteHelper;
+    private ContactDataAccess dbContact;
     private List<Contact> mListContact;
     private ContactAdapter mContactAdapter;
 
@@ -37,8 +38,8 @@ public class ContactsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts);
         lvContacts = findViewById(R.id.lv_contacts);
-        mSqliteHelper = new SQLiteHelper(this);
-        mListContact = mSqliteHelper.all();
+        dbContact = new ContactDataAccess(this);
+        mListContact = dbContact.all();
         setAdapter();
         requestPermissions();
         showDialogCallSMS();
@@ -82,11 +83,15 @@ public class ContactsActivity extends AppCompatActivity {
                 return true;
             case R.id.btn_backup_google_drive:
                 // TODO: Export File JSON
+                dbContact.exportToJSON();
                 // TODO: Upload File Data To Google Drive
+                GoogleDriveAPI.UploadFileData(dbContact.getFileBackup());
                 return true;
             case R.id.btn_import_google_drive:
                 // TODO: Down Load File JSON From Google Drive
+                GoogleDriveAPI.DownloadFile();
                 // TODO: Import File JSON
+                dbContact.importFromJSON();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -125,7 +130,7 @@ public class ContactsActivity extends AppCompatActivity {
 
     private void updateListViewContact() {
         mListContact.clear();
-        mListContact.addAll(mSqliteHelper.all());
+        mListContact.addAll(dbContact.all());
         if (mContactAdapter != null) {
             mContactAdapter.notifyDataSetChanged();
         }
