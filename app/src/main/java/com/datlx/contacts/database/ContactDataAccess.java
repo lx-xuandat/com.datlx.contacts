@@ -108,6 +108,33 @@ public class ContactDataAccess extends SQLiteOpenHelper {
         return mListContacts;
     }
 
+    public Contact find(int id) {
+        Contact contact = new Contact();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = " + id, null);
+        if (cursor.moveToFirst()) {
+            int indexColumnID = 0;
+            int indexColumnContactName = 1;
+            int indexColumnCompany = 2;
+            int indexColumnPhone = 3;
+            int indexColumnEmail = 4;
+            int indexColumnAddress = 5;
+            int indexColumnAvatar = 6;
+            contact = new Contact(
+                    cursor.getInt(indexColumnID),
+                    cursor.getString(indexColumnContactName),
+                    cursor.getString(indexColumnCompany),
+                    cursor.getString(indexColumnPhone),
+                    cursor.getString(indexColumnEmail),
+                    cursor.getString(indexColumnAddress),
+                    cursor.getString(indexColumnAvatar)
+            );
+        }
+        cursor.close();
+        db.close();
+        return contact;
+    }
+
     /**
      * Insert SQLite, return id if success
      * @param mContact instant of Contact Model

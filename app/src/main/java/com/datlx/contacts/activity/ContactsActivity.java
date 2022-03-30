@@ -3,6 +3,7 @@ package com.datlx.contacts.activity;
 import static com.datlx.contacts.R.menu.menu_option_activity_contacts;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -13,10 +14,16 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.datlx.contacts.R;
 import com.datlx.contacts.adapter.ContactAdapter;
@@ -28,6 +35,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ContactsActivity extends AppCompatActivity {
+    public static final int REQUEST_CODE_CONTACT_INSERT = 1;
+    public static final int REQUEST_CODE_CONTACT_UPDATE = 2;
+    public static final int REQUEST_CODE_CONTACT_DELETE = 3;
     private ListView lvContacts;
     private ContactDataAccess dbContact;
     private List<Contact> mListContact;
@@ -38,6 +48,7 @@ public class ContactsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts);
         lvContacts = findViewById(R.id.lv_contacts);
+        registerForContextMenu(lvContacts);
         dbContact = new ContactDataAccess(this);
         mListContact = dbContact.all();
         setAdapter();
@@ -45,24 +56,10 @@ public class ContactsActivity extends AppCompatActivity {
         showDialogCallSMS();
     }
 
-    private void showDialogCallSMS() {
-        lvContacts.setOnItemClickListener((adapterView, view, i, l) -> {
-            Dialog dialog = new Dialog(ContactsActivity.this);
-            dialog.setContentView(R.layout.dialog_call_sms);
-            Button btnCall = (Button) dialog.findViewById(R.id.btn_call);
-            Button btnSendMessage = (Button) dialog.findViewById(R.id.btn_send_message);
-            String phone = mListContact.get(i).getPhone();
-
-            btnCall.setOnClickListener(viewTel -> startActivity(new Intent(
-                    Intent.ACTION_CALL,
-                    Uri.parse("tel:" + phone))));
-
-            btnSendMessage.setOnClickListener(viewSMS -> startActivity(new Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse("sms:" + phone))));
-
-            dialog.show();
-        });
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateListViewContact();
     }
 
     @Override
@@ -95,6 +92,50 @@ public class ContactsActivity extends AppCompatActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_context_activity_contacts, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        int contactID = mListContact.get(info.position).getID();
+
+        switch (item.getItemId()) {
+            case R.id.edit_contact:
+                Intent intent = new Intent(getApplicationContext(), ContactEditActivity.class);
+                intent.putExtra("contact_id", contactID);
+                Log.d("EDIT_CONTACT_ID: ", contactID + "");
+                startActivity(intent);
+            case R.id.copy_phone:
+            case R.id.share_phone:
+            case R.id.delete:
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + item.getItemId());
+        }
+
+        return super.onContextItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case ContactsActivity.REQUEST_CODE_CONTACT_INSERT:
+            case ContactsActivity.REQUEST_CODE_CONTACT_UPDATE:
+            case ContactsActivity.REQUEST_CODE_CONTACT_DELETE:
+                updateListViewContact();
+                Toast.makeText(this, "REQUEST_CODE_CONTACT_DELETE", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + requestCode);
         }
     }
 
@@ -134,5 +175,25 @@ public class ContactsActivity extends AppCompatActivity {
         if (mContactAdapter != null) {
             mContactAdapter.notifyDataSetChanged();
         }
+    }
+
+    private void showDialogCallSMS() {
+        lvContacts.setOnItemClickListener((adapterView, view, i, l) -> {
+            Dialog dialog = new Dialog(ContactsActivity.this);
+            dialog.setContentView(R.layout.dialog_call_sms);
+            Button btnCall = (Button) dialog.findViewById(R.id.btn_call);
+            Button btnSendMessage = (Button) dialog.findViewById(R.id.btn_send_message);
+            String phone = mListContact.get(i).getPhone();
+
+            btnCall.setOnClickListener(viewTel -> startActivity(new Intent(
+                    Intent.ACTION_CALL,
+                    Uri.parse("tel:" + phone))));
+
+            btnSendMessage.setOnClickListener(viewSMS -> startActivity(new Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("sms:" + phone))));
+
+            dialog.show();
+        });
     }
 }
