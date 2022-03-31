@@ -136,8 +136,21 @@ public class ContactsActivity extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.copy_phone:
+                Toast.makeText(this, "Copied Clipboard!", Toast.LENGTH_SHORT).show();
+                break;
             case R.id.share_phone:
+                break;
             case R.id.delete:
+                if (mContactDataAccess.delete(contactID) > 0) {
+                    Toast.makeText(this, "Delete Success", Toast.LENGTH_SHORT).show();
+                    if (mKeywordSearchContact != null) {
+                        refreshListView(mContactDataAccess.search(mKeywordSearchContact));
+                    } else {
+                        refreshListView(mContactDataAccess.all());
+                    }
+                } else {
+                    Toast.makeText(this, "Delete Fail", Toast.LENGTH_SHORT).show();
+                }
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + item.getItemId());
