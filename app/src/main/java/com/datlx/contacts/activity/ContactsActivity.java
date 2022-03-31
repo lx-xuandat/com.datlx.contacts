@@ -3,7 +3,6 @@ package com.datlx.contacts.activity;
 import static com.datlx.contacts.R.menu.menu_option_activity_contacts;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -41,10 +40,10 @@ public class ContactsActivity extends AppCompatActivity {
     public static final int REQUEST_CODE_CONTACT_UPDATE = 2;
     public static final int REQUEST_CODE_CONTACT_DELETE = 3;
     private ListView lvContacts;
-    private ContactDataAccess dbContact;
+    private ContactDataAccess mContactDataAccess;
     private List<Contact> mListContact;
     private ContactAdapter mContactAdapter;
-    private SearchView searchView;
+    private String mKeywordSearchContact = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +51,8 @@ public class ContactsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_contacts);
         lvContacts = findViewById(R.id.lv_contacts);
         registerForContextMenu(lvContacts);
-        dbContact = new ContactDataAccess(this);
-        mListContact = dbContact.all();
+        mContactDataAccess = new ContactDataAccess(this);
+        mListContact = mContactDataAccess.all();
         setAdapter();
         requestPermissions();
         showDialogCallSMS();
@@ -62,14 +61,18 @@ public class ContactsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        updateListViewContact();
+        if (mKeywordSearchContact != null) {
+            refreshListView(mContactDataAccess.search(mKeywordSearchContact));
+        } else {
+            refreshListView(mContactDataAccess.all());
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(menu_option_activity_contacts, menu);
 
-        searchView = (SearchView) menu.findItem(R.id.app_bar_search).getActionView();
+        SearchView searchView = (SearchView) menu.findItem(R.id.app_bar_search).getActionView();
         SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setSubmitButtonEnabled(false);
@@ -82,20 +85,8 @@ public class ContactsActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String s) {
-                ArrayList<Contact> filteredContacts = new ArrayList<Contact>();
-                String keyWord = s.toLowerCase();
-                mListContact = dbContact.all();
-
-                for (Contact contact : mListContact) {
-                    String phone = contact.getPhone().toLowerCase();
-                    String name = contact.getContactName().toLowerCase();
-
-                    if (phone.contains(keyWord) || name.contains(keyWord)) {
-                        filteredContacts.add(contact);
-                    }
-                }
-                mListContact = filteredContacts;
-                lvContacts.setAdapter(new ContactAdapter(getApplicationContext(), 0, filteredContacts));
+                mKeywordSearchContact = s.trim().toLowerCase();
+                refreshListView(mContactDataAccess.search(mKeywordSearchContact));
                 return false;
             }
         });
@@ -105,24 +96,21 @@ public class ContactsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.app_bar_search:
-                // TODO: Search Contacts
-                return true;
             case R.id.btn_create_contact:
                 // TODO: Use Intent Result for update ListView Contacts
                 startActivity(new Intent(this, ContactAddActivity.class));
                 return true;
             case R.id.btn_backup_google_drive:
                 // TODO: Export File JSON
-                dbContact.exportToJSON();
+                mContactDataAccess.exportToJSON();
                 // TODO: Upload File Data To Google Drive
-                GoogleDriveAPI.UploadFileData(dbContact.getFileBackup());
+                GoogleDriveAPI.UploadFileData(mContactDataAccess.getFileBackup());
                 return true;
             case R.id.btn_import_google_drive:
                 // TODO: Down Load File JSON From Google Drive
                 GoogleDriveAPI.DownloadFile();
                 // TODO: Import File JSON
-                dbContact.importFromJSON();
+                mContactDataAccess.importFromJSON();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -139,14 +127,14 @@ public class ContactsActivity extends AppCompatActivity {
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        int contactID = mListContact.get(info.position).getID();
-
+        Contact mContact = (Contact) lvContacts.getItemAtPosition(info.position);
+        int contactID = mContact.getID();
         switch (item.getItemId()) {
             case R.id.edit_contact:
                 Intent intent = new Intent(getApplicationContext(), ContactEditActivity.class);
                 intent.putExtra("contact_id", contactID);
-                Log.d("EDIT_CONTACT_ID: ", contactID + "");
                 startActivity(intent);
+                break;
             case R.id.copy_phone:
             case R.id.share_phone:
             case R.id.delete:
@@ -156,21 +144,6 @@ public class ContactsActivity extends AppCompatActivity {
         }
 
         return super.onContextItemSelected(item);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode){
-            case ContactsActivity.REQUEST_CODE_CONTACT_INSERT:
-            case ContactsActivity.REQUEST_CODE_CONTACT_UPDATE:
-            case ContactsActivity.REQUEST_CODE_CONTACT_DELETE:
-                updateListViewContact();
-                Toast.makeText(this, "REQUEST_CODE_CONTACT_DELETE", Toast.LENGTH_SHORT).show();
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + requestCode);
-        }
     }
 
     private void setAdapter() {
@@ -203,9 +176,11 @@ public class ContactsActivity extends AppCompatActivity {
         }
     }
 
-    private void updateListViewContact() {
+    private void refreshListView(List<Contact> contacts) {
         mListContact.clear();
-        mListContact.addAll(dbContact.all());
+        if (contacts != null) {
+            mListContact.addAll(contacts);
+        }
         if (mContactAdapter != null) {
             mContactAdapter.notifyDataSetChanged();
         }
