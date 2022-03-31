@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.app.SearchManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -23,6 +24,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.datlx.contacts.R;
@@ -42,6 +44,7 @@ public class ContactsActivity extends AppCompatActivity {
     private ContactDataAccess dbContact;
     private List<Contact> mListContact;
     private ContactAdapter mContactAdapter;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +68,37 @@ public class ContactsActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(menu_option_activity_contacts, menu);
+
+        searchView = (SearchView) menu.findItem(R.id.app_bar_search).getActionView();
+        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setSubmitButtonEnabled(false);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                ArrayList<Contact> filteredContacts = new ArrayList<Contact>();
+                String keyWord = s.toLowerCase();
+                mListContact = dbContact.all();
+
+                for (Contact contact : mListContact) {
+                    String phone = contact.getPhone().toLowerCase();
+                    String name = contact.getContactName().toLowerCase();
+
+                    if (phone.contains(keyWord) || name.contains(keyWord)) {
+                        filteredContacts.add(contact);
+                    }
+                }
+                mListContact = filteredContacts;
+                lvContacts.setAdapter(new ContactAdapter(getApplicationContext(), 0, filteredContacts));
+                return false;
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 
