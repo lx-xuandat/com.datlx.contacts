@@ -108,6 +108,45 @@ public class ContactDataAccess extends SQLiteOpenHelper {
         return mListContacts;
     }
 
+    public List<Contact> search(String keyword) {
+        List<Contact> mListContacts = new ArrayList<>();
+        try {
+            SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+            @SuppressLint("Recycle") Cursor cursor = sqLiteDatabase.rawQuery(
+                    "select * from " + TABLE_NAME + " where " + COLUMN_CONTACT_NAME + " LIKE ? OR " + COLUMN_PHONE + " LIKE ?",
+                    new String[]{
+                            "%" + keyword + "%",
+                            "%" + keyword + "%"
+                    }
+            );
+            if (cursor.moveToFirst()) {
+                int indexColumnID = 0;
+                int indexColumnContactName = 1;
+                int indexColumnCompany = 2;
+                int indexColumnPhone = 3;
+                int indexColumnEmail = 4;
+                int indexColumnAddress = 5;
+                int indexColumnAvatar = 6;
+                do {
+                    mListContacts.add(new Contact(
+                            cursor.getInt(indexColumnID),
+                            cursor.getString(indexColumnContactName),
+                            cursor.getString(indexColumnCompany),
+                            cursor.getString(indexColumnPhone),
+                            cursor.getString(indexColumnEmail),
+                            cursor.getString(indexColumnAddress),
+                            cursor.getString(indexColumnAvatar)
+                    ));
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
+            sqLiteDatabase.close();
+        } catch (Exception e) {
+            Log.d("Exception Search Contact", e.getMessage());
+        }
+        return mListContacts;
+    }
+
     public Contact find(int id) {
         Contact contact = new Contact();
         SQLiteDatabase db = this.getReadableDatabase();
