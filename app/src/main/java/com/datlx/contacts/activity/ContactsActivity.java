@@ -10,6 +10,9 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.app.Dialog;
 import android.app.SearchManager;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -136,9 +139,19 @@ public class ContactsActivity extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.copy_phone:
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("phone", mContact.getPhone());
+                clipboard.setPrimaryClip(clip);
                 Toast.makeText(this, "Copied Clipboard!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.share_phone:
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, mContact.getContactName() + " - " + mContact.getPhone());
+                sendIntent.setType("text/plain");
+
+                Intent shareIntent = Intent.createChooser(sendIntent, null);
+                startActivity(shareIntent);
                 break;
             case R.id.delete:
                 if (mContactDataAccess.delete(contactID) > 0) {
