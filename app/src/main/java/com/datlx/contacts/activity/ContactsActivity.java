@@ -8,11 +8,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -154,16 +156,30 @@ public class ContactsActivity extends AppCompatActivity {
                 startActivity(shareIntent);
                 break;
             case R.id.delete:
-                if (mContactDataAccess.delete(contactID) > 0) {
-                    Toast.makeText(this, "Delete Success", Toast.LENGTH_SHORT).show();
-                    if (mKeywordSearchContact != null) {
-                        refreshListView(mContactDataAccess.search(mKeywordSearchContact));
-                    } else {
-                        refreshListView(mContactDataAccess.all());
-                    }
-                } else {
-                    Toast.makeText(this, "Delete Fail", Toast.LENGTH_SHORT).show();
-                }
+                AlertDialog.Builder builder = new AlertDialog.Builder(ContactsActivity.this);
+
+                builder.setMessage(R.string.dialog_delete_contact)
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                if (mContactDataAccess.delete(contactID) > 0) {
+                                    Toast.makeText(ContactsActivity.this, "Delete Success", Toast.LENGTH_SHORT).show();
+                                    if (mKeywordSearchContact != null) {
+                                        refreshListView(mContactDataAccess.search(mKeywordSearchContact));
+                                    } else {
+                                        refreshListView(mContactDataAccess.all());
+                                    }
+                                } else {
+                                    Toast.makeText(ContactsActivity.this, "Delete Fail", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // User cancelled the dialog
+                            }
+                        });
+                AlertDialog dialog =  builder.create();
+                dialog.show();
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + item.getItemId());

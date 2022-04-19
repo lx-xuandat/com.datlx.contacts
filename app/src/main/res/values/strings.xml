@@ -17,4 +17,7 @@
     <string name="tv_contact_name">Contact name</string>
     <string name="tv_contact_phone">Contact Phone</string>
     <string name="search">Search</string>
+    <string name="dialog_delete_contact">Bạn Có Muốn Xóa Danh Bạ Này ?</string>
+    <string name="yes">Đồng Ý</string>
+    <string name="cancel">Hủy</string>
 </resources>
