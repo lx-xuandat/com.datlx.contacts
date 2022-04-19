@@ -7,6 +7,14 @@
     android:orientation="vertical"
     tools:context=".activity.ContactsActivity">
 
+    <TextView
+        android:id="@+id/tvTotal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tổng Sô Danh Bạ: 0"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
     <ListView
         android:id="@+id/lv_contacts"
         android:layout_width="match_parent"
