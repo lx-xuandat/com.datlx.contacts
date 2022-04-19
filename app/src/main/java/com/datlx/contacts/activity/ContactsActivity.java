@@ -17,7 +17,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,6 +26,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.datlx.contacts.R;
@@ -69,6 +69,7 @@ public class ContactsActivity extends AppCompatActivity {
         } else {
             refreshListView(mContactDataAccess.all());
         }
+        showTotalContact();
     }
 
     @Override
@@ -164,6 +165,7 @@ public class ContactsActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(this, "Delete Fail", Toast.LENGTH_SHORT).show();
                 }
+                showTotalContact();
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + item.getItemId());
@@ -183,6 +185,7 @@ public class ContactsActivity extends AppCompatActivity {
             mContactAdapter.notifyDataSetChanged();
             lvContacts.setSelection(mContactAdapter.getCount() - 1);
         }
+        showTotalContact();
     }
 
     private void requestPermissions() {
@@ -230,5 +233,10 @@ public class ContactsActivity extends AppCompatActivity {
 
             dialog.show();
         });
+    }
+
+    private void showTotalContact(){
+        TextView tvCount = findViewById(R.id.tvTotal);
+        tvCount.setText("Tổng Số Danh Bạ: " + mListContact.size());
     }
 }

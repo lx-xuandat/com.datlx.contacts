@@ -42,6 +42,7 @@ public class ContactDataAccess extends SQLiteOpenHelper {
     private static final String COLUMN_EMAIL = "sEmail";
     private static final String COLUMN_ADDRESS = "sAddress";
     private static final String COLUMN_AVATAR = "sAvatar";
+    private static final String COLUMN_GROUP = "sGroup";
 
     private final Context context;
 
@@ -70,7 +71,9 @@ public class ContactDataAccess extends SQLiteOpenHelper {
                 COLUMN_PHONE + " TEXT, " +
                 COLUMN_EMAIL + " TEXT, " +
                 COLUMN_ADDRESS + " TEXT, " +
-                COLUMN_AVATAR + " TEXT)";
+                COLUMN_AVATAR + " TEXT, " +
+                COLUMN_GROUP + " TEXT" +
+                ")";
         sqLiteDatabase.execSQL(SQLQuery);
     }
 
@@ -159,6 +162,7 @@ public class ContactDataAccess extends SQLiteOpenHelper {
             int indexColumnEmail = 4;
             int indexColumnAddress = 5;
             int indexColumnAvatar = 6;
+            int indexColumnGroup = 7;
             contact = new Contact(
                     cursor.getInt(indexColumnID),
                     cursor.getString(indexColumnContactName),
@@ -168,6 +172,7 @@ public class ContactDataAccess extends SQLiteOpenHelper {
                     cursor.getString(indexColumnAddress),
                     cursor.getString(indexColumnAvatar)
             );
+            contact.setGroup(cursor.getString(indexColumnGroup));
         }
         cursor.close();
         db.close();
@@ -176,6 +181,7 @@ public class ContactDataAccess extends SQLiteOpenHelper {
 
     /**
      * Insert SQLite, return id if success
+     *
      * @param mContact instant of Contact Model
      * @return fail: 0, success > 0
      */
@@ -190,6 +196,7 @@ public class ContactDataAccess extends SQLiteOpenHelper {
         values.put(COLUMN_CONTACT_NAME, mContact.getContactName());
         values.put(COLUMN_EMAIL, mContact.getEmail());
         values.put(COLUMN_PHONE, mContact.getPhone());
+        values.put(COLUMN_GROUP, mContact.getGroup());
 
         result = db.insert(TABLE_NAME, null, values);
         db.close();
@@ -200,13 +207,13 @@ public class ContactDataAccess extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
+        values.put(COLUMN_GROUP, mContact.getGroup());
         values.put(COLUMN_ADDRESS, mContact.getAddress());
         values.put(COLUMN_AVATAR, mContact.getAvatar());
         values.put(COLUMN_COMPANY, mContact.getCompany());
         values.put(COLUMN_CONTACT_NAME, mContact.getContactName());
         values.put(COLUMN_EMAIL, mContact.getEmail());
         values.put(COLUMN_PHONE, mContact.getPhone());
-
         return db.update(
                 TABLE_NAME,
                 values,
