@@ -34,7 +34,6 @@ public class ContactEditActivity extends AppCompatActivity {
         Intent intent = getIntent();
         int contactId = intent.getIntExtra("contact_id", 0);
         mContact = new ContactDataAccess(this).find(contactId);
-        Log.d("LLLLLinh Beo: ", mContact.getGroup());
         initialize();
         bindingEvents();
         initData();
@@ -68,12 +67,13 @@ public class ContactEditActivity extends AppCompatActivity {
         edtAddress.setText(mContact.getAddress());
 
         switch (mContact.getGroup()) {
-            case "office":
+            case Contact.GROUP_OFFICE:
                 rbtGroupOffice.setChecked(true);
                 break;
-            case "friend":
+            case Contact.GROUP_FRIEND:
                 rbtGroupFriend.setChecked(true);
                 break;
+            case Contact.GROUP_FAMILY:
             default:
                 rbtGroupFamily.setChecked(true);
                 break;
@@ -86,12 +86,12 @@ public class ContactEditActivity extends AppCompatActivity {
         mContact.setPhone(edtPhone.getText() + "");
         mContact.setEmail(edtEmail.getText() + "");
         mContact.setAddress(edtAddress.getText() + "");
-        String group = "office";
+        String group = Contact.GROUP_FAMILY;
         if (rbtGroupOffice.isChecked()) {
-            group = "family";
+            group = Contact.GROUP_OFFICE;
         }
         if (rbtGroupFriend.isChecked()) {
-            group = "friend";
+            group = Contact.GROUP_FRIEND;
         }
         mContact.setGroup(group);
         if (new ContactDataAccess(ContactEditActivity.this).update(mContact) == 1) {

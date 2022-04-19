@@ -171,7 +171,7 @@ public class ContactDataAccess extends SQLiteOpenHelper {
                     cursor.getString(indexColumnAddress),
                     cursor.getString(indexColumnAvatar)
             );
-            contact.setGroup(cursor.getString(indexColumnAvatar));
+            contact.setGroup(cursor.getString(indexColumnGroup));
         }
         cursor.close();
         db.close();
@@ -212,7 +212,6 @@ public class ContactDataAccess extends SQLiteOpenHelper {
         values.put(COLUMN_CONTACT_NAME, mContact.getContactName());
         values.put(COLUMN_EMAIL, mContact.getEmail());
         values.put(COLUMN_PHONE, mContact.getPhone());
-        Log.d("COLUMN_GROUP", mContact.getGroup() + "");
         return db.update(
                 TABLE_NAME,
                 values,
