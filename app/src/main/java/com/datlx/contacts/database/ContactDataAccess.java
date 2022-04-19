@@ -72,7 +72,8 @@ public class ContactDataAccess extends SQLiteOpenHelper {
                 COLUMN_EMAIL + " TEXT, " +
                 COLUMN_ADDRESS + " TEXT, " +
                 COLUMN_AVATAR + " TEXT, " +
-                COLUMN_GROUP + " TEXT)";
+                COLUMN_GROUP + " TEXT" +
+                ")";
         sqLiteDatabase.execSQL(SQLQuery);
     }
 
@@ -180,6 +181,7 @@ public class ContactDataAccess extends SQLiteOpenHelper {
 
     /**
      * Insert SQLite, return id if success
+     *
      * @param mContact instant of Contact Model
      * @return fail: 0, success > 0
      */
@@ -194,7 +196,7 @@ public class ContactDataAccess extends SQLiteOpenHelper {
         values.put(COLUMN_CONTACT_NAME, mContact.getContactName());
         values.put(COLUMN_EMAIL, mContact.getEmail());
         values.put(COLUMN_PHONE, mContact.getPhone());
-        values.put(COLUMN_GROUP , mContact.getGroup());
+        values.put(COLUMN_GROUP, mContact.getGroup());
 
         result = db.insert(TABLE_NAME, null, values);
         db.close();
